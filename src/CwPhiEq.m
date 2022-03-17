@@ -1,16 +1,14 @@
-function [dx] = CwPhiEq(t, x)
+function [dx] = CwPhiEq(t, x, n, tf)
 % C-W协态变量状态方程
 
-n = x(1);
-
-phi = CwPhi(n, t);
+phi = CwPhi(n, tf - t);
 [~, b] = Cw(n);
-phi_lv = CwPhiLv(n, t);
 
-phi_dot = phi * b * phi_lv;
+phi_l = CwPhi(n, -t)';
+phi_dot = phi * b * phi_l(4 : 6, :);
+
 dx = x;
-dx(1) = 0;
 for i = 1 : 6
-    dx(1 + 6 * (i - 1) + 1 : 6) = phi_dot(i, :);
+    dx(6 * (i - 1) + (1 : 6)) = phi_dot(i, :)';
 end
 end

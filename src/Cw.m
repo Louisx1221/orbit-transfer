@@ -1,4 +1,4 @@
-function [a, b] =  Cw(n, t)
+function [a, b] = Cw(n)
 % C-W状态矩阵
 
 a =  [0., 0.,         0.,     1.,      0.,     0.;
