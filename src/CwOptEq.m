@@ -4,7 +4,7 @@ function [dx] = CwOptEq(t, x, n, lambda0)
 [A, B] = Cw(n);
 
 Phi = CwPhi(n, -t)';
-tau = Phi(4 : 6, :) * lambda0;
+tau = -Phi(4 : 6, :) * lambda0;
 
 dx = A * x + B * tau;
 % dx = A * x;
