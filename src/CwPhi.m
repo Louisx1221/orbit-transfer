@@ -1,11 +1,11 @@
-function phi = CwPhi(n, t)
+function Phi = CwPhi(n, t)
 % 状态转移矩阵
 
 nt = n * t;
 s = sin(nt);
 c = cos(nt);
 
-phi = [1., 6. * (nt - s),     0.,     (4. * s - 3. * nt) / n, 2. * (1. - c) / n, 0.;
+Phi = [1., 6. * (nt - s),     0.,     (4. * s - 3. * nt) / n, 2. * (1. - c) / n, 0.;
        0., 4. - 3. * c,       0.,     -2. * (1. - c) / n,     s / n,             0.;
        0., 0.,                c,      0.,                     0.,                s / n;
        0., 6. * n * (1. - c), 0.,     4. * c - 3.,            2. * s,            0.;

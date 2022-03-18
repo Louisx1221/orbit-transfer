@@ -1,11 +1,11 @@
 function [dx] = CwOptEq(t, x, n, lambda0)
 % C-W交会最优控制方程
 
-[a, b] = Cw(n);
+[A, B] = Cw(n);
 
-phi_l = CwPhi(n, -t)';
-tau = phi_l(4 : 6, :) * lambda0;
+Phi = CwPhi(n, -t)';
+tau = Phi(4 : 6, :) * lambda0;
 
-dx = a * x + b * tau;
-
+dx = A * x + B * tau;
+% dx = A * x;
 end
