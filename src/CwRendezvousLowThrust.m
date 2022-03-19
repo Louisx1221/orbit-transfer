@@ -6,9 +6,11 @@ function [t, x] = CwRendezvousLowThrust(x0, n, tf, step)
 [~, B] = Cw(n);
 Phif = CwPhi(n, tf);
 Phi0 = CwPhi(n, 0);
-Psi0 = B * Phi0(:, 4 : 6)';
+Psi0 = Phif * B * Phi0(:, 4 : 6)';
 
-[~, Psi] = ode45(@(t, psi) CwPsiEq(t, psi, n, tf), 0 : step : tf, Psi0);
+Psi0 = zeros(6);
+
+[~, Psi] = ode45(@(t, x) CwPsiEq(t, x, n, tf), 0 : step : tf, Psi0);
 
 Psif = zeros(6);
 for i = 1 : 6
