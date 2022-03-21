@@ -1,5 +1,65 @@
 # C-W
 
+## X
+
+$$
+\dot\lambda_x = 0 \\
+\Rightarrow \lambda_x = \lambda_{x0}
+$$
+
+## ZW
+
+$$
+\left\{\begin{aligned}
+	\dot\lambda_z &= n^2\lambda_w \\
+	\dot\lambda_w &= -\lambda_z
+\end{aligned}\right.
+$$
+
+$$
+\begin{gathered}
+	\ddot\lambda_w = -\dot\lambda_z = -n^2\lambda_w \\
+	\Rightarrow \lambda_w = C_1\cos nt + C_2\sin nt
+\end{gathered}
+$$
+
+$$
+\begin{gathered}
+	\dot\lambda_z = C_1n^2\cos nt + C_2n^2\sin nt \\
+	\Rightarrow \lambda_z = C_1n\sin nt - C_2n\cos nt + C_3
+\end{gathered}
+$$
+
+$$
+\begin{gathered}
+	\dot\lambda_w = -C_1n\sin nt + C_2n\sin nt - C_3\\
+	\Rightarrow C_3 = 0
+\end{gathered}
+$$
+
+$$
+\left\{\begin{aligned}
+	\lambda_{z0} &= -nC_2 \\
+	\lambda_{w0} &= C_1
+\end{aligned}\right.
+$$
+
+$$
+\left\{\begin{aligned}
+	C_1 &= \lambda_{w0}\\
+    C_2 &= -\frac1n\lambda_{z0}
+\end{aligned}\right.
+$$
+
+$$
+\left\{\begin{aligned}
+	\lambda_{z} &= \cos nt\lambda_{z0} + n\sin nt\lambda_{w0} \\
+	\lambda_{w} &= -\frac{\sin nt}n\lambda_{z0} + \cos nt\lambda_{w0}
+\end{aligned}\right.
+$$
+
+## YUV
+
 $$
 \left\{\begin{aligned}
 	\dot\lambda_y &= -3n^2\lambda_v \\
@@ -60,6 +120,8 @@ $$
 	\lambda_{v} &= \frac{2(1 - \cos nt)}n\lambda_{x0} - \frac{\sin nt}n\lambda_{y0} - 2\sin nt\lambda_{u0} + \cos nt\lambda_{v0}
 \end{aligned}\right.
 $$
+
+## Total
 
 $$
 \boldsymbol\Phi_\lambda(t) = 

@@ -3,8 +3,8 @@ function [dx] = CwOptEq(t, x, n, lambda0)
 
 [A, B] = Cw(n);
 
-Phi = CwPhi(n, -t)';
-tau = -Phi(4 : 6, :) * lambda0;
+Phi = CwPhi(n, -t).';
+tau = -B' * Phi * lambda0;
 
 dx = A * x + B * tau;
 % dx = A * x;

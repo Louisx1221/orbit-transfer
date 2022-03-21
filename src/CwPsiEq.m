@@ -4,7 +4,7 @@ function [dx] = CwPsiEq(t, x, n, tf)
 Phi = CwPhi(n, tf - t);
 [~, B] = Cw(n);
 
-Phi_l = CwPhi(n, -t)';
+Phi_l = CwPhi(n, -t).';
 dPsi = -Phi * B * Phi_l(4 : 6, :);
 
 dx = x;

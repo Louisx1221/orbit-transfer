@@ -6,9 +6,7 @@ function [t, x] = CwRendezvousLowThrust(x0, n, tf, step)
 [~, B] = Cw(n);
 Phif = CwPhi(n, tf);
 Phi0 = CwPhi(n, 0);
-Psi0 = Phif * B * Phi0(:, 4 : 6)';
-
-Psi0 = zeros(6);
+Psi0 = Phif * B * Phi0(:, 4 : 6).';
 
 [~, Psi] = ode45(@(t, x) CwPsiEq(t, x, n, tf), 0 : step : tf, Psi0);
 
@@ -18,7 +16,7 @@ for i = 1 : 6
 end
 
 % 协态变量初始值
-lambda0 = -(Phif * x0 \ Psif)';
+lambda0 = -(Phif * x0 \ Psif).';
 % xf = [0., 0., 0., 0., 0., 0.]';
 % lambda0 = ((Phif * x0 - xf) \ phi_int)';
 
