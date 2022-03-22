@@ -1,4 +1,4 @@
-function [t, x] = CwInDirOpt(x0, n, tf, step)
+function [t, x] = CwIndirOpt(x0, n, tf, step)
 % 连续推力C-W交会
 % 燃料最优 J = \min \int \sum a_i ^ 2 \mathrm{d} t / 2
 
@@ -71,5 +71,22 @@ dP = A' * P + P * A - P * Q * P;
 dx = x;
 for i = 1 : 6
     dx(6 * (i - 1) + (1 : 6)) = dP(:, i);
+end
+end
+
+function [dx] = CwOptEq(t, x, n, lambda0)
+% C-W交会最优控制方程
+
+[A, B] = Cw(n);
+
+Phi = CwPhi(n, -t).';
+tau = -B' * Phi * lambda0;
+
+dx = x;
+dx(1 : 6) = A * x(1 : 6) + B * tau;
+% dx = A * x;
+
+if length(x) == 9
+    dx(7 : 9) = tau - x(7 : 9);
 end
 end
