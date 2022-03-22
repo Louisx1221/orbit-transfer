@@ -12,9 +12,9 @@ end
 
 % 协态变量初始值
 Phif = CwPhi(n, tf);
-lambda0 = -inv(Psif) * (Phif * x0);
+lambda0 = -Psif \ (Phif * x0) ;
 % xf = [0., 0., 0., 0., 0., 0.]';
-% lambda0 = -inv(Psif) * (Phif * x0 - xf);
+% lambda0 = -Psif \ (Phif * x0 - xf);
 
 % P = CwRiccati(n, tf, step);
 % lambda0_ = P * x0;
