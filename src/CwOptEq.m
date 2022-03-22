@@ -6,6 +6,11 @@ function [dx] = CwOptEq(t, x, n, lambda0)
 Phi = CwPhi(n, -t).';
 tau = -B' * Phi * lambda0;
 
-dx = A * x + B * tau;
+dx = x;
+dx(1 : 6) = A * x(1 : 6) + B * tau;
 % dx = A * x;
+
+if length(x) == 9
+    dx(7 : 9) = tau - x(7 : 9);
+end
 end
