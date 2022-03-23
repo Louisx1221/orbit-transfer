@@ -1,17 +1,12 @@
-function [t, x] = CwIndirOpt(x0, n, tf, varargin)
-% 连续推力C-W交会
-% 燃料最优 J = \min \int \sum a_i ^ 2 \mathrm{d} t / 2
+function [t, x] = CwIndirOpt2(x0, n, tf, varargin)
+% 固定推力C-W交会
+% 燃料最优 J = \min \int F \mathrm{d} t
 
 flag = 1;
 if isempty(varargin)
     step = 1;
 else
     step = varargin{1};
-    if length(varargin) == 2
-        if strcmp(varargin{2}, 'Riccati')
-           flag = 2;
-        end
-    end
 end
 
 Psi0 = zeros(6);
@@ -37,7 +32,7 @@ x0 = [x0; zeros(3, 1)];
 [t, x] = ode45(@(t, x) CwOptEq(t, x, n, lambda0), 0 : step : tf, x0);
 end
 
-function [dx] = CwPsiEq(t, x, n, tf)
+function [dx] = CwLambdaEq(t, x, n, tf)
 % C-W协态变量状态方程
 
 Phi = CwPhi(n, tf - t);
