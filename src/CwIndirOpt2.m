@@ -1,101 +1,86 @@
-function [t, x] = CwIndirOpt2(x0, n, tf, varargin)
+function [t, x] = CwIndirOpt2(rv0, n, f, tf, tspan)
 % 固定推力C-W交会
 % 燃料最优 J = \min \int F \mathrm{d} t
 
-flag = 1;
-if isempty(varargin)
-    step = 1;
+args.n = n;
+args.f = f;
+args.tspan = tspan;
+
+
+% 初值
+lambda0 = 0.01 * ones(6, 1); % 协态变量
+tf0 = 0.9 * tf; % 转移时长
+x0 = [lambda0; tf0];
+
+ub = [0.02 * ones(1, 6), tf];
+lb = -ub;
+lb(end) = 0.1 * tf;
+
+options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-7,...
+                    'Algorithm','sqp',...
+                    'MaxFunEvals',10000000,'MaxIter',inf,...
+                    'Display','iter','largescale','on',...
+                    'PlotFcn','optimplotfvalconstr');
+
+[x, fval, exitflag, output] = fmincon(@(x) CwJ(x, rv0, args), x0, [], [], [], [], lb, ub, @(x) CwCon(x, rv0, args), options)
+
+x0 = [rv0; x(1 : 6); zeros(3, 1)];
+[t, x] = ode45(@(t, x) CwTpbvp(t, x, args), 0 : args.tspan : x(end), x0);
+end
+
+%% 性能指标
+function [J] = CwJ(x, rv0, args)
+% x:    lambda, tf
+% args: n, f, tspan
+
+x0 = [rv0; x(1 : 6); zeros(3, 1)];
+[t, x] = ode45(@(t, x) CwTpbvp(t, x, args), 0 : args.tspan : x(end), x0);
+
+J = 0;
+for i = 1 : length(t)
+    J = J + norm(x(i, 7 : 9));
+end
+end
+
+%% 边界条件
+function [c, ceq] = CwCon(x, rv0, args)
+% x:    lambda, tf
+% args: n, f, tspan
+
+x0 = [rv0; x(1 : 6); zeros(3, 1)];
+
+[~, x] = ode45(@(t, x) CwTpbvp(t, x, args), 0 : args.tspan : x(end), x0);
+
+% 容许误差
+tol = [1e1 1e1 1e1 1 1 1];
+% 期望终端状态
+rvf = zeros(1, 6);
+
+c = abs(x(end, 1 : 6) - rvf) - tol;
+ceq = [];
+end
+
+%% 两点边值问题
+function [dx] = CwTpbvp(~, x, args)
+% x: rv, lambda, u
+% arg: n, f, tspan
+
+lambda = x(7 : 12);
+
+[A, B] = Cw(args.n);
+
+lambda_v = B' * lambda;
+
+% 开关函数
+% u = -lambda_v / norm(lambda_v) * args.f;
+if 1 - norm(lambda_v) < 0
+    u = -lambda_v / norm(lambda_v) * args.f;
 else
-    step = varargin{1};
+    u = zeros(3, 1);
 end
-
-Psi0 = zeros(6);
-[~, Psi] = ode45(@(t, x) CwPsiEq(t, x, n, tf), 0 : step : tf, Psi0);
-
-Psif = zeros(6);
-for i = 1 : 6
-    Psif(:, i) = Psi(end, 6 * (i - 1) + (1 : 6))';
-end
-
-% 协态变量初始值
-if flag == 1
-    Phif = CwPhi(n, tf);
-    lambda0 = -Psif \ (Phif * x0) ;
-    % xf = [0., 0., 0., 0., 0., 0.]';
-    % lambda0 = -Psif \ (Phif * x0 - xf);
-else
-    P = CwRiccati(n, tf, step);
-    lambda0 = P * x0;
-end
-
-x0 = [x0; zeros(3, 1)];
-[t, x] = ode45(@(t, x) CwOptEq(t, x, n, lambda0), 0 : step : tf, x0);
-end
-
-function [dx] = CwLambdaEq(t, x, n, tf)
-% C-W协态变量状态方程
-
-Phi = CwPhi(n, tf - t);
-[~, B] = Cw(n);
-
-Phi_l = CwPhi(n, -t)';
-Tau = -B' * Phi_l;
-dPsi = Phi * B * Tau;
 
 dx = x;
-for i = 1 : 6
-    dx(6 * (i - 1) + (1 : 6)) = dPsi(:, i);
-end
-end
-
-function [P] = CwRiccati(n, tf, step)
-% C-W方程黎卡提方程
-% \dot P = -A' P - P A - P Q P
-% Q = B R' B
-% S = diag([sr, sr, sr, sv, sv, sv])
-% R = diag([r r r])
-
-S = diag([1 * ones(1, 3), 1 * ones(1, 3)]);
-[~, x] = ode45(@(t, x) CwRiccatiEq(t, x, n), 0 : step : tf, S);
-x = x(end, :);
-
-P = zeros(6);
-for i = 1 : 6
-    P(:, i) = x(6 * (i - 1) + (1 : 6));
-end
-end
-
-function [dx] = CwRiccatiEq(~, x, n)
-
-P = zeros(6);
-for i = 1 : 6
-    P(:, i) = x(6 * (i - 1) + (1 : 6));
-end
-
-[A, B] = Cw(n);
-R = 1 * eye(3);
-Q = B * R' * B';
-dP = A' * P + P * A - P * Q * P;
-
-dx = x;
-for i = 1 : 6
-    dx(6 * (i - 1) + (1 : 6)) = dP(:, i);
-end
-end
-
-function [dx] = CwOptEq(t, x, n, lambda0)
-% C-W交会最优控制方程
-
-[A, B] = Cw(n);
-
-Phi = CwPhi(n, -t).';
-tau = -B' * Phi * lambda0;
-
-dx = x;
-dx(1 : 6) = A * x(1 : 6) + B * tau;
-% dx = A * x;
-
-if length(x) == 9
-    dx(7 : 9) = tau - x(7 : 9);
-end
+dx(1 : 6) = A * x(1 : 6) + B * u;
+dx(7 : 12) = -A' * lambda;
+dx(13 : 15) = u - x(13 : 15);
 end
