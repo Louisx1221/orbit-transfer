@@ -37,8 +37,8 @@ x0 = [x0; zeros(3, 1)];
 [t, x] = ode45(@(t, x) CwOptEq(t, x, n, lambda0), 0 : step : tf, x0);
 end
 
+%% C-W协态变量状态方程
 function [dx] = CwPsiEq(t, x, n, tf)
-% C-W协态变量状态方程
 
 Phi = CwPhi(n, tf - t);
 [~, B] = Cw(n);
@@ -53,8 +53,8 @@ for i = 1 : 6
 end
 end
 
+%% C-W方程黎卡提方程
 function [P] = CwRiccati(n, tf, step)
-% C-W方程黎卡提方程
 % \dot P = -A' P - P A - P Q P
 % Q = B R' B
 % S = diag([sr, sr, sr, sv, sv, sv])
@@ -70,6 +70,7 @@ for i = 1 : 6
 end
 end
 
+%% C-W交会协态变量黎卡提方程
 function [dx] = CwRiccatiEq(~, x, n)
 
 P = zeros(6);
@@ -88,8 +89,8 @@ for i = 1 : 6
 end
 end
 
+%% C-W交会最优控制方程
 function [dx] = CwOptEq(t, x, n, lambda0)
-% C-W交会最优控制方程
 
 [A, B] = Cw(n);
 
