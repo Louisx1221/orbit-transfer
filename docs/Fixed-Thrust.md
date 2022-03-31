@@ -31,7 +31,7 @@ $$
 $$
 
 $$
-\dot{\boldsymbol{\lambda}} = -\frac{\partial H}{\boldsymbol{\partial x}} = 
+\dot{\boldsymbol{\lambda}} = -\frac{\partial H}{\boldsymbol{\partial x}} \Leftrightarrow
 \left\{\begin{aligned}
 	\dot\lambda_x &= -3n^2\lambda_u \\
 	\dot\lambda_y &= 0 \\
