@@ -6,3 +6,4 @@ vec = zeros(1, m * n);
 for i = 1 : m
     vec((i - 1) * n + (1 : n)) = mat(i, :);
 end
+end

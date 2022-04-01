@@ -1,10 +1,9 @@
-function [sol, x_nlp, fval, exitflag, output, lambda, ct] = Gpm(x0, xf, DynEq, sol0, lb_, ub_, N, args)
+function [sol, x_nlp, fval, exitflag, output, lambda, ct] = Gpm(x0, xf, Cost, DynEq, sol0, lb_, ub_, N, step, args)
 % 高斯伪谱法
 
 tau = GaussNodes(N);
 D = GaussDiffMat(tau);
 w = GaussWeights(tau);
-dim_x = length(x0);
 dim = length(lb_) - 1;
 tf = sol0(end, 1);
 x_nlp0 = interp1(sol0(:, 1), sol0(:, 1 + (1 : dim)), (tau + 1) * tf / 2);
@@ -18,17 +17,14 @@ for i = 1 : N
 end
 lb(end) = lb_(end);
 ub(end) = ub_(end);
-tic;
 options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-6,...
                     'Algorithm','interior-point',...
                     'MaxFunEvals',10000000,'MaxIter',1000,...
                     'Display','iter','largescale','on','PlotFcn','optimplotfvalconstr');
-[x_nlp, fval, exitflag, output, lambda] = fmincon(@(x_nlp) GaussJ(x_nlp), x_nlp0, [], [], [], [], lb, ub, @(x_nlp) GaussCon(x_nlp, x0, xf, DynEq, D, w, args), options);
+tic;
+[x_nlp, fval, exitflag, output, lambda] = fmincon(@(x_nlp) NlpCost(x_nlp, tau, Cost, dim, x0, step), x_nlp0, [], [], [], [], lb, ub, @(x_nlp) NlpCon(x_nlp, x0, xf, DynEq, D, w, args), options);
 ct = toc;
-x_nlp_ = Vec2Mat(x_nlp(1 : end - 1), dim);
-sol_x = Lagrange([-1; tau], [x0'; x_nlp_(:, 1 : dim_x)], sol0(:, 1));
-sol_u = Lagrange(tau, x_nlp_(:, 1 + dim_x : end), sol0(2 : end, 1));
-sol = [sol0(:, 1), sol_x, [zeros(1, dim - dim_x);sol_u]];
+sol = NlpResult(x_nlp, tau, dim, x0, step);
 end
 
 %% 高斯配点
@@ -89,32 +85,48 @@ end
 
 %% 拉格朗日插值
 function [x] = Lagrange(tau_, x_, t)
-    tau = 2 * (t - t(1)) / (t(end) - t(1)) - 1;
-    n_ = length(tau_);
-    n = length(tau);
-%     m = size(x, 2);
-    L = ones(n, n_);
-    for k = 1 : n
-        for i = 1 : n_
-            for j = 1 : n_
-                if j == i
-                    continue
-                end
-                L(k, i) = L(k, i) * (tau(k) - tau_(j));
-                L(k, i) = L(k, i) / (tau_(i) - tau_(j));
+tau = 2 * (t - t(1)) / (t(end) - t(1)) - 1;
+n_ = length(tau_);
+n = length(tau);
+L = ones(n, n_);
+for k = 1 : n
+    for i = 1 : n_
+        for j = 1 : n_
+            if j == i
+                continue
             end
+            L(k, i) = L(k, i) * (tau(k) - tau_(j));
+            L(k, i) = L(k, i) / (tau_(i) - tau_(j));
         end
     end
-    x = L * x_;
+end
+x = L * x_;
 end
 
-%% 性能指标
-function [J] = GaussJ(x_nlp)
-    J = x_nlp(end);
+%% 非线性规划问题结果
+function [sol, tf] = NlpResult(x_nlp, tau, dim, x0, step)
+tf = x_nlp(end);
+t = (0 : step : tf)';
+dim_x = length(x0);
+dim_u = dim - dim_x;
+x_nlp_ = Vec2Mat(x_nlp(1 : end - 1), dim);
+sol_x = Lagrange([-1; tau], [x0'; x_nlp_(:, 1 : dim_x)], t);
+sol_u = Lagrange(tau, x_nlp_(:, 1 + dim_x : end), t(2 : end));
+sol_u = [sol_u, t(2 : end)];
+for i = 1 : length(t) - 1
+    sol_u(i, end) = norm(sol_u(i, 1 : dim_u));
+end
+sol = [t, sol_x, [zeros(1, dim_u + 1); sol_u]];
 end
 
-%% 约束
-function [c, ceq] = GaussCon(x_nlp, x0, xf, DynEq, D, w, args)
+%% 非线性规划问题性能指标
+function [J] = NlpCost(x_nlp, tau, Cost, dim, x0, step)
+    [sol, tf] = NlpResult(x_nlp, tau, dim, x0, step);
+    J = Cost(sol, tf);
+end
+
+%% 非线性规划问题约束
+function [c, ceq] = NlpCon(x_nlp, x0, xf, DynEq, D, w, args)
 % 输入: xut   高斯点状态
 %       DynEq 动力学方程
 %       D   微分约束矩阵
