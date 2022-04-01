@@ -26,9 +26,12 @@ options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-6,...
 [x_nlp, fval, exitflag, output, lambda] = fmincon(@(x_nlp) GaussJ(x_nlp), x_nlp0, [], [], [], [], lb, ub, @(x_nlp) GaussCon(x_nlp, x0, xf, DynEq, D, w, args), options);
 ct = toc;
 x_nlp_ = Vec2Mat(x_nlp(1 : end - 1), dim);
-sol_x = Lagrange([-1; tau], [x0'; x_nlp_(:, 1 : dim_x)], sol0(:, 1));
-sol_u = Lagrange(tau, x_nlp_(:, 1 + dim_x : end), sol0(2 : end, 1));
-sol = [sol0(:, 1), sol_x, [zeros(1, dim - dim_x);sol_u]];
+sol_x = Lagrange([-1; tau], [x0, x_nlp_, sol0(:, 1));
+sol_u = Lagrange(tau, x_nlp_, sol0(2 : end, 1));
+sol = sol0;
+sol(:, 2 : dim_x + 1) = sol_x;
+sol(2 : end, dim_x + 1 : end) = sol_u;
+sol(1, dim_x + 1 : end) = zeros(1, dim - dim_x);
 end
 
 %% 高斯配点
