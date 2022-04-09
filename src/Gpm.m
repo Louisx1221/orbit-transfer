@@ -157,5 +157,9 @@ end
 ceq(n * N + (1 : n)) = xf - x0 - tf / 2 * f' * w;
 
 % 不等式约束
-c = [];
+% c = [];
+c = zeros(N, 1);
+for i = 1 : N
+    c(i) = norm(u(i, :)) - 0.05;
+end
 end
