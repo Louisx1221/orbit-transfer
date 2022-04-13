@@ -30,12 +30,12 @@ J = \frac12\int_{t_0}^{t_f}\boldsymbol u^2\mathrm{d}t
 $$
 
 $$
-H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = \frac12\boldsymbol u^2 + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f
+H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = \frac12\boldsymbol u^2 + \boldsymbol \lambda^{\mathrm{T}}(\boldsymbol A \boldsymbol x + \boldsymbol B \boldsymbol u)
 $$
 
 $$
-\frac{\partial H}{\partial \boldsymbol u} = \boldsymbol u + \boldsymbol B \boldsymbol \lambda^{\mathrm{T}} = 0 \\
-\Rightarrow \boldsymbol u = -\boldsymbol B \boldsymbol \lambda^{\mathrm{T}}
+\frac{\partial H}{\partial \boldsymbol u} = \boldsymbol u + \boldsymbol B^{\mathrm{T}} \boldsymbol \lambda = 0 \\
+\Rightarrow \boldsymbol u = -\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda
 $$
 
 ### 时间最优
@@ -50,11 +50,7 @@ H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = \boldsymbol \lambda^{\ma
 $$
 
 $$
-\boldsymbol u = \arg\min H = -\frac{\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda}{||\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda||}u_\max \\
-$$
-
-$$
-H(t_f) + \frac{\partial \Phi}{\partial t_f} = 1 + \boldsymbol \lambda^{\mathrm{T}}(t_f)\boldsymbol f(t_f) = 0
+\boldsymbol u = \arg\min H = -\frac{\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda}{\|\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda\|}u_\max \\
 $$
 
 $$
@@ -67,19 +63,36 @@ $$
 \boldsymbol{ceq}=[\boldsymbol x_0, \boldsymbol x_f, \boldsymbol \lambda_f]
 $$
 
-### 能量最优
+### 燃料最优
 
 $$
-J = \int_{t_0}^{t_f}||\boldsymbol u||\mathrm{d}t
+\dot{\boldsymbol x} = \boldsymbol f(\boldsymbol x, \boldsymbol u) = \boldsymbol A \boldsymbol x + a_\max u\boldsymbol B\boldsymbol\alpha, \quad 0\leqslant u\leqslant 1
 $$
 
 $$
-J = \int_{t_0}^{t_f}(1-\varepsilon)||\boldsymbol u|| + \varepsilon\boldsymbol u^2\mathrm{d}t
+J = \int_{t_0}^{t_f}u\mathrm{d}t \\
+\rightarrow J = \int_{t_0}^{t_f}(1-\varepsilon)u + \varepsilon u^2\mathrm{d}t
 $$
 
+$$
+H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = \boldsymbol \lambda^{\mathrm{T}}\boldsymbol A \boldsymbol x + u\left(\varepsilon u + 1 - \varepsilon + a_\max\boldsymbol\lambda^\mathrm{T}\boldsymbol B\boldsymbol \alpha)\right)
+$$
 
 $$
-\boldsymbol u = -\frac{\boldsymbol \lambda}{||\boldsymbol \lambda||}
+(u, \boldsymbol \alpha) = \arg\min H
+$$
+
+$$
+\boldsymbol \alpha = -\frac{\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda}{\|\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda\|}
+$$
+
+$$
+u=\left\{\begin{aligned}
+&0,&\rho>\varepsilon \\
+&\frac12-\frac\rho{2\varepsilon},&\|\rho\|\leqslant\varepsilon \\
+&1, &\rho<-\varepsilon
+\end{aligned}\right. \\
+\rho=1-a_\max\|\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda\|
 $$
 
 ## 两点边值问题

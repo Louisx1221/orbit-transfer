@@ -138,8 +138,6 @@ $$
 = \boldsymbol\Phi^{\mathrm T}(-t)
 $$
 
-## 
-
 $$
 \left\{\begin{aligned}
 	\ddot\lambda_u &= 3n^2\lambda_u + 2n\dot\lambda_v \\

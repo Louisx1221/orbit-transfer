@@ -8,7 +8,7 @@ args.tspan = tspan;
 
 
 % 初值
-lambda0 = 0.01 * ones(6, 1); % 协态变量
+lambda0 = 1 * ones(6, 1); % 协态变量
 tf0 = 0.9 * tf; % 转移时长
 x0 = [lambda0; tf0];
 
@@ -33,13 +33,14 @@ function [J] = CwJ(x, rv0, args)
 % x:    lambda, tf
 % args: n, f, tspan
 
-x0 = [rv0; x(1 : 6); zeros(3, 1)];
-[t, x] = ode45(@(t, x) CwTpbvp(t, x, args), 0 : args.tspan : x(end), x0);
+% x0 = [rv0; x(1 : 6); zeros(3, 1)];
+% [t, x] = ode45(@(t, x) CwTpbvp(t, x, args), 0 : args.tspan : x(end), x0);
 
 J = 0;
-for i = 1 : length(t)
-    J = J + norm(x(i, 7 : 9));
-end
+J = x(end);
+% for i = 1 : length(t)
+%     J = J + norm(x(i, 7 : 9));
+% end
 end
 
 %% 边界条件
@@ -56,8 +57,10 @@ tol = [1e1 1e1 1e1 1 1 1];
 % 期望终端状态
 rvf = zeros(1, 6);
 
-c = abs(x(end, 1 : 6) - rvf) - tol;
+c= [];
+% c = abs(x(end, 1 : 6) - rvf) - tol;
 ceq = [];
+ceq = x(end, 1 : 6) - rvf;
 end
 
 %% 两点边值问题

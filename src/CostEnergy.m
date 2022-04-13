@@ -1,4 +1,4 @@
-function [J] = CostFuel2(sol, tf)
+function [J] = CostEnergy(sol, tf)
 % 燃料最优价值函数
 
 N = size(sol, 1);
