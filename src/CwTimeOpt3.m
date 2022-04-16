@@ -1,4 +1,4 @@
-function [dx] = CwFuelOpt(t, x, epsilon, p)
+function [dx] = CwTimeOpt3(t, x, epsilon, p)
 % C-W交会燃料最优控制方程
 % x: [x, lambda, u]
 
@@ -9,15 +9,19 @@ lambda = x(7 : 12);
 lambda_v = B' * lambda;
 
 % 开关函数
-rho = 1 - p.f * norm(lambda_v);
-if rho > epsilon
-    u = 0;
-elseif rho < -epsilon
-    u = 1;
-else
-    u = 1 / 2 - rho / 2 / epsilon;
+u = -lambda_v;
+if norm(u) > p.f
+    u = u * p.f / norm(u);
 end
-u = -u * p.f * lambda_v / norm(lambda_v);
+% rho = 1 - p.f * norm(lambda_v);
+% if rho > epsilon
+%     u = 0;
+% elseif rho < -epsilon
+%     u = 1;
+% else
+%     u = 1 / 2 - rho / 2 / epsilon;
+% end
+% u = -u * p.f * lambda_v / norm(lambda_v);
 
 dx = x;
 dx(1 : 6) = A * x(1 : 6) + B * u;

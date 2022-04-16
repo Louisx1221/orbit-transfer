@@ -52,7 +52,7 @@ phi_vr = [3 * n * sin(nt) 0 0;
           0 0 -n * sin(nt)];
 phi_vv = [cos(nt) 2 * sin(nt) 0;
           -2 * sin(nt) 4 * cos(nt) - 3 0;
-          0 0 cos(nt)];    
+          0 0 cos(nt)];
 % Âö³å
 v0_ = phi_rv \ (rf - phi_rr * r0);
 vf_ = phi_vr * r0 + phi_vv * v0_;

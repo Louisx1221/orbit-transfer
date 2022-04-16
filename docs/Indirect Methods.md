@@ -38,36 +38,13 @@ $$
 \Rightarrow \boldsymbol u = -\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda
 $$
 
-### 时间最优
-
-$$
-J = t_f = \int_0^{t_f}1\mathrm{d} t \\
-\Phi = t_f, \quad \mathrm{or} \quad L = 1
-$$
-
-$$
-H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f
-$$
-
-$$
-\boldsymbol u = \arg\min H = -\frac{\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda}{\|\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda\|}u_\max \\
-$$
-
-$$
-\tau = \frac{t}{t_f - t_0} \\
-\boldsymbol X = [\boldsymbol x, \boldsymbol \lambda, t_f] \\
-\dot{\boldsymbol X(\tau)} = (t_f - t_0) \cdot [\dot{\boldsymbol x}(t), \dot{\boldsymbol \lambda}(t), 0]
-$$
-
-$$
-\boldsymbol{ceq}=[\boldsymbol x_0, \boldsymbol x_f, \boldsymbol \lambda_f]
-$$
-
 ### 燃料最优
 
 $$
 \dot{\boldsymbol x} = \boldsymbol f(\boldsymbol x, \boldsymbol u) = \boldsymbol A \boldsymbol x + a_\max u\boldsymbol B\boldsymbol\alpha, \quad 0\leqslant u\leqslant 1
 $$
+
+同伦
 
 $$
 J = \int_{t_0}^{t_f}u\mathrm{d}t \\
@@ -75,7 +52,7 @@ J = \int_{t_0}^{t_f}u\mathrm{d}t \\
 $$
 
 $$
-H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = \boldsymbol \lambda^{\mathrm{T}}\boldsymbol A \boldsymbol x + u\left(\varepsilon u + 1 - \varepsilon + a_\max\boldsymbol\lambda^\mathrm{T}\boldsymbol B\boldsymbol \alpha)\right)
+H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = \boldsymbol \lambda^{\mathrm{T}}\boldsymbol A \boldsymbol x + u\left(\varepsilon u + 1 - \varepsilon + a_\max\boldsymbol\lambda^\mathrm{T}\boldsymbol B\boldsymbol \alpha\right)
 $$
 
 $$
@@ -91,8 +68,43 @@ u=\left\{\begin{aligned}
 &0,&\rho>\varepsilon \\
 &\frac12-\frac\rho{2\varepsilon},&\|\rho\|\leqslant\varepsilon \\
 &1, &\rho<-\varepsilon
-\end{aligned}\right. \\
+\end{aligned}\right.
+$$
+
+开关函数
+
+$$
 \rho=1-a_\max\|\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda\|
+$$
+
+### 时间最优
+
+$$
+J = t_f = \int_0^{t_f}1\mathrm{d} t \\
+\Phi = t_f, \quad \mathrm{or} \quad L = 1
+$$
+
+$$
+H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = 1 + \boldsymbol \lambda^{\mathrm{T}}(\boldsymbol A \boldsymbol x + \boldsymbol B \boldsymbol u)
+$$
+
+$$
+\boldsymbol u = \arg\min H = -\frac{\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda}{\|\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda\|}u_\max
+$$
+
+$$
+\left.\left(\frac{\partial \boldsymbol \Phi}{\partial t_f} + H\right)\right|_{t_f} = 1 + \boldsymbol \lambda^{\mathrm{T}}(t_f)\left[\boldsymbol A \boldsymbol x(t_f) + \boldsymbol B \boldsymbol u(t_f)\right] = 0
+$$
+
+
+$$
+\tau = \frac{t}{t_f - t_0} \\
+\boldsymbol X = [\boldsymbol x, \boldsymbol \lambda, t_f] \\
+\dot{\boldsymbol X(\tau)} = (t_f - t_0) \cdot [\dot{\boldsymbol x}(t), \dot{\boldsymbol \lambda}(t), 0]
+$$
+
+$$
+\boldsymbol{ceq}=[\boldsymbol x_0, \boldsymbol x_f, \boldsymbol \lambda_f]
 $$
 
 ## 两点边值问题

@@ -39,6 +39,6 @@ x0 = [s0; x(1 : 6); zeros(4, 1)];
 [~, x] = ode45(DynEq, 0 : args.tspan : tf, x0);
 
 % 期望终端状态
-ceq = abs(x(end, 1 : 6)' - sf);
+ceq = x(end, 1 : 6)' - sf;
 c = [];
 end
