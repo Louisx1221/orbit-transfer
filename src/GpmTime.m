@@ -1,4 +1,4 @@
-function [sol, x_nlp, fval, exitflag, output, lambda, ct] = Gpm(x0, xf, Cost, DynEq, sol0, lb_, ub_, N, step, args)
+function [sol, x_nlp, fval, exitflag, output, lambda, ct] = GpmTime(x0, xf, Cost, DynEq, sol0, lb_, ub_, N, p)
 % 高斯伪谱法
 
 tau = GaussNodes(N);
@@ -22,9 +22,9 @@ options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-6,...
                     'MaxFunEvals',10000000,'MaxIter',1000,...
                     'Display','iter','largescale','on','PlotFcn','optimplotfvalconstr');
 tic;
-[x_nlp, fval, exitflag, output, lambda] = fmincon(@(x_nlp) NlpCost(x_nlp, tau, Cost, dim, x0, step), x_nlp0, [], [], [], [], lb, ub, @(x_nlp) NlpCon(x_nlp, x0, xf, DynEq, D, w, args), options);
+[x_nlp, fval, exitflag, output, lambda] = fmincon(@(x_nlp) NlpCost(x_nlp, tau, Cost, dim, x0, p.tspan), x_nlp0, [], [], [], [], lb, ub, @(x_nlp) NlpCon(x_nlp, x0, xf, DynEq, D, w, p), options);
 ct = toc;
-sol = NlpResult(x_nlp, tau, dim, x0, step);
+sol = NlpResult(x_nlp, tau, dim, x0, p.tspan);
 end
 
 %% 高斯配点
@@ -126,8 +126,8 @@ function [J] = NlpCost(x_nlp, tau, Cost, dim, x0, step)
 end
 
 %% 非线性规划问题约束
-function [c, ceq] = NlpCon(x_nlp, x0, xf, DynEq, D, w, args)
-% 输入: xut   高斯点状态
+function [c, ceq] = NlpCon(x_nlp, x0, xf, DynEq, D, w, p)
+% 输入: x_nlp 高斯点状态
 %       DynEq 动力学方程
 %       D   微分约束矩阵
 % 输出：c   不等式约束
@@ -140,14 +140,18 @@ m = (length(x_nlp) - 1) / N - n; % 控制变量维度
 % 状态变量
 x_nlp = Vec2Mat(x_nlp(1 : end - 1), m + n);
 x = x_nlp(:, 1 : n);
-u = x_nlp(:, n + 1 : end);
+ang = x_nlp(:, n + 1 : end);
+u = zeros(size(ang, 1), 3);
+u(:, 1) = p.f * cos(ang(:, 2)) .* cos(ang(:, 1));
+u(:, 2) = p.f * cos(ang(:, 2)) .* sin(ang(:, 1));
+u(:, 3) = p.f * sin(ang(:, 2));
 
 % 等式约束(dim_x * N + dim_x)：动力学方程约束，终端约束
 ceq = zeros(n * N + n, 1);
 % 动力学方程
 f = zeros(N, n);
 for i = 1 : N
-    f(i, :) = DynEq([], x(i, :), u(i, :), args);
+    f(i, :) = DynEq([], x(i, :), u(i, :), p);
 end
 % 动力学方程约束
 for i = 1 : n
@@ -156,10 +160,15 @@ end
 % 终端约束
 ceq(n * N + (1 : n)) = xf - x0 - tf / 2 * f' * w;
 
+% ceq = [ceq; zeros(N, 1)];
+% for i = 1 : N
+%     ceq(n * N + n + i) = norm(u(i, :)) - 0.01;
+% end
+
 % 不等式约束
-% c = [];
-c = zeros(N, 1);
-for i = 1 : N
-    c(i) = norm(u(i, :)) - 0.05;
-end
+c = [];
+% c = zeros(N, 1);
+% for i = 1 : N
+%     c(i) = norm(u(i, :)) - 0.01;
+% end
 end

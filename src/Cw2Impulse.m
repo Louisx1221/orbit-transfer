@@ -4,17 +4,14 @@ function [dv, dv0, dvf] = Cw2Impulse(n, x0, tof, varargin)
 % 
 % 输入:
 % n         轨道角速度         (rad/s)
-% r0        初始相位位置       (m)
-% v0        初始相对速度       (m/s)
+% x0        初始相位位置速度    (m, m/s)
 % tof       转移时长           (s)
-% mass      卫星湿重           (kg)          可缺省
-% isp       比冲               (Ns/kg = m/s) 可缺省
+% xf        目标相位位置速度    (m, m/s)    可缺省，默认为0
 %
 % 输出:
 % dv        所需总速度脉冲     (m/s)
 % dv0       第一次速度脉冲     (m/s)
 % dvf       第二次速度脉冲     (m/s)
-% fuel      所需燃料           (kg)
 %
 % 参考：
 % Orbital Mechanics for Engineering Students, 4th, Howard Curtis, p369-370
@@ -38,7 +35,7 @@ else
     vf = xf(4 : 6);
 end
 
-%% 速度脉冲
+%% 双脉冲
 % C-W
 nt = n * tof;
 phi_rr = [4 - 3 * cos(nt) 0 0;
