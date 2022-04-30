@@ -62,10 +62,12 @@ $$
 \end{array}\right]-f(s)
 $$
 
+式中，$F = A \frac{\mathrm{d}t}{\mathrm{d}s}$及$f = B\frac{\mathrm{d}t}{\mathrm{d}s}$
 $$
 \boldsymbol{y}\left(s_{f}\right)=\Phi\left(s_{f}, s_{0}\right) \boldsymbol{y}\left(s_{0}\right)-\int_{s_{0}}^{s_{f}} \Phi\left(s_{f}, v\right) \boldsymbol{f}(v) \mathrm{d} v
 $$
 
+式中，$\boldsymbol \Phi = e^{\boldsymbol F}$
 $$
 \Phi\left(s_{f}, s_{0}\right)=\left[\begin{array}{ll}
 \Phi_{1,1} & \Phi_{1,2} \\
@@ -81,6 +83,7 @@ $$
 \left[\begin{array}{c}z_1\\z_2\end{array}\right] = \int_{s_{0}}^{s_{f}} \Phi\left(s_{f}, v\right) \boldsymbol{f}(v) \mathrm{d} v
 $$
 
+协态变量初值
 $$
 \lambda_{x}\left(s_{0}\right)=\Phi_{1,2}^{-1}\left(\delta \boldsymbol{x}\left(s_{f}\right)-\Phi_{1,1} \delta \boldsymbol{x}\left(s_{0}\right)+z_{1}\right)
 $$
@@ -93,9 +96,7 @@ $$
 
 ### Hodographic-Shaping Method
 
-基函数
-
-#### $t$
+#### 基函数
 
 | $v(u)$ | $\frac{\mathrm{d}v}{\mathrm{d}u}$ | $\int v\mathrm{d}u$ |
 | ------ | --------------------------------- | ------------------- |
@@ -124,7 +125,31 @@ P_{f}-P_{0}
 \end{array}\right]
 $$
 
-#### $\theta$
+#### $t$
+
+$$
+V_r(0) = c_1 = v_{r,0} \\
+V_r(t_f) = c_1 + c_2 t_f + c_3 t_f^2= v_{r,f} \\
+r_f - r_0 = \int_0^{t_f} V_r(t) ~\mathrm{d}t = c_1 t_f + c_2\frac{t_f^2}2 + c_3\frac{t_f^3}3
+$$
+
+
+$$
+V_{\theta}(0) = c_1 = v_{\theta,0} \\
+V_{\theta}(t_f) = c_1 + c_2 t_f + c_3 t_f^2 = v_{\theta,f} \\
+\Rightarrow c_2 = \frac{v_{\theta,f} - v_{\theta,0}}{t_f} - c_3 t_f
+$$
+
+$$
+\theta(t) = \theta_0 + \int_0^t \dot \theta ~\mathrm{d}t = \theta_0 + \int_0^t \frac{V_{\theta}(t)}{r(t)} ~\mathrm{d}t \\
+=\theta_0 + \int_0^t \frac{v_{\theta,0} + \left(\frac{v_{\theta,f} - v_{\theta,0}}{t_f} - c_3 t_f\right)t + c_3t^2}{r_0 + c_{r,1}t + c_{r,1}\frac{t^2}{2} + c_{r,1}\frac{t^3}{3}} ~\mathrm{d}t
+$$
+
+$$
+\theta_f - \theta_0 = c_3\int_0^{t_f}\frac{t(t - t_f)}{r(t)}~\mathrm{d}t + \int_0^{t_f}\frac{v_{\theta,f}t + v_{\theta,0}(t_f - t)}{r(t)t_f}~\mathrm{d}t \Rightarrow c_3
+$$
+
+#### $\theta\rightarrow s$ 
 
 $$
 \begin{aligned}
@@ -134,6 +159,7 @@ $$
 \end{aligned}
 $$
 
+归一化
 $$
 s(\theta) = \frac{\theta-\theta_0}{\theta_f - \theta_0},\quad s\in[0,1]
 $$
@@ -150,7 +176,8 @@ $$
 1. $R$
 
 $$
-R(\theta) = \frac{\mathrm{d}r}{\mathrm{d}\theta} = \left.\frac{\mathrm{d}r}{\mathrm{d}t} \right/\frac{\mathrm{d}\theta}{\mathrm{d}t} = \frac{rv_r}{v_\theta} = c_1 + c_2 s + c_3 s^2 = R(s)
+R(\theta) = \frac{\mathrm{d}r}{\mathrm{d}\theta} = \left.\frac{\mathrm{d}r}{\mathrm{d}t} \right/\frac{\mathrm{d}\theta}{\mathrm{d}t} = \frac{rv_r}{v_\theta} \\
+R(s) =\frac{\mathrm{d}r}{\mathrm{d}\theta} \cdot\frac{\mathrm{d}\theta}{\mathrm{d}s} = \left(\theta_f - \theta_0\right)\frac{rv_r}{v_\theta} = c_1 + c_2 s + c_3 s^2
 $$
 
 $$
