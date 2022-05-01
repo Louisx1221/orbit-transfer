@@ -14,16 +14,15 @@ else
     end
 end
 
-Psi0 = zeros(6);
-[~, Psi] = ode45(@(t, x) CwPsiEq(t, x, n, tf), 0 : step : tf, Psi0);
-
-Psif = zeros(6);
-for i = 1 : 6
-    Psif(:, i) = Psi(end, 6 * (i - 1) + (1 : 6))';
-end
-
 % 协态变量初始值
 if flag == 1
+    Psi0 = zeros(6);
+    [~, Psi] = ode45(@(t, x) CwPsiEq(t, x, n, tf), 0 : step : tf, Psi0);
+
+    Psif = zeros(6);
+    for i = 1 : 6
+        Psif(:, i) = Psi(end, 6 * (i - 1) + (1 : 6))';
+    end
     Phif = CwPhi(n, tf);
     lambda0 = -Psif \ (Phif * x0) ;
     % xf = [0., 0., 0., 0., 0., 0.]';
