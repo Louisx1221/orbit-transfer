@@ -6,7 +6,6 @@ args.n = n;
 args.f = f;
 args.tspan = tspan;
 
-
 % 初值
 lambda0 = [pi / 2, 0.4, 0.0003, 0.0003, 0.004, -1]'; % 协态变量
 tf0 = 0.9 * tf; % 转移时长

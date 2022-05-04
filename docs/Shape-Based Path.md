@@ -1,14 +1,20 @@
 # 形状法
 
-## 形状路径
-
-$$
-\dot{\boldsymbol x} = \boldsymbol f(\boldsymbol x, \boldsymbol u) = \boldsymbol A \boldsymbol x + \boldsymbol B \boldsymbol u
-$$
+## 柱坐标系
 
 柱坐标系(cylindrical coordinate system, CyCS)
+
+### $v$
+
 $$
-\dot{\boldsymbol{x}}=\left[\begin{array}{c}
+x = \left[\begin{array}{cccccc}
+r & \theta & z & v_r & v_\theta & v_z
+\end{array}\right]^{\mathrm{T}}
+$$
+
+$$
+\dot{\boldsymbol{x}}=
+\left[\begin{array}{c}
 v_{r} \\
 v_{\theta} / r \\
 v_{z} \\
@@ -21,27 +27,28 @@ I_{3 \times 3}
 \end{array}\right] \boldsymbol{\alpha}
 $$
 
-标称轨道
-
+式中，$R = \sqrt(r^2 + z^2)$
 $$
-\delta \dot{\boldsymbol{x}}=M\left(\boldsymbol{x}_{\mathrm{nom}}\right) \delta \boldsymbol{x}+\left[\begin{array}{l}
+\dot{\boldsymbol x} = J_F(\boldsymbol x)\boldsymbol x + \boldsymbol B\boldsymbol u \\
+\boldsymbol B = \left[\begin{array}{c}
 0_{3 \times 3} \\
 I_{3 \times 3}
-\end{array}\right]\left(\frac{u T_{\mathrm{max}}}{m} \boldsymbol{\alpha}-\boldsymbol{a}_{\mathrm{nom}}\right)
+\end{array}\right]
 $$
-
 Jacobian矩阵
 $$
 J_{F}\left(x_{1}, \ldots, x_{n}\right) =\frac{\partial\left(y_{1}, \ldots, y_{m}\right)}{\partial\left(x_{1}, \ldots, x_{n}\right)}
 =\left[\begin{array}{ccc}
 \frac{\partial y_{1}}{\partial x_{1}} & \cdots & \frac{\partial y_{1}}{\partial x_{n}} \\
-\vdots & \cdots & \vdots \\
+\vdots & \ddots & \vdots \\
 \frac{\partial y_{m}}{\partial x_{1}} & \cdots & \frac{\partial y_{m}}{\partial x_{n}}
 \end{array}\right]
 $$
 
 $$
-M(\boldsymbol{x})=\left[\begin{array}{cccccc}
+J_{F}(\boldsymbol{x})=
+\frac{\partial \dot{\boldsymbol x}}{\partial \boldsymbol x}
+=\left[\begin{array}{cccccc}
 0 & 0 & 0 & 1 & 0 & 0 \\
 -v_{\theta} / r^{2} & 0 & 0 & 0 & 1 / r & 0 \\
 0 & 0 & 0 & 0 & 0 & 1 \\
@@ -51,7 +58,57 @@ v_{r} v_{\theta} / r^{2} & 0 & 0 & -v_{\theta} / r & -v_{r} / r & 0 \\
 \end{array}\right]
 $$
 
-形状路径
+### $\mathrm{d}/\mathrm{d}t$ 
+
+$$
+x = \left[\begin{array}{cccccc}
+r & \theta & z & \dot v & \dot \theta & \dot z
+\end{array}\right]^{\mathrm{T}}
+$$
+
+$$
+\dot{\boldsymbol{x}}=
+\left[\begin{array}{c}
+\dot r \\
+\dot \theta \\
+\dot z \\
+r \dot \theta^{2} - \mu r / R^{3} \\
+-2\dot r \dot \theta / r \\
+-\mu z / R^{3}
+\end{array}\right]+\frac{T_{\max } u}{m}
+\left[\begin{array}{ccc}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+1 & 0 & 0 \\
+0 & 1/r & 0 \\
+0 & 0 & 1
+\end{array}\right] \boldsymbol{\alpha}
+$$
+
+$$
+J_{F}(\boldsymbol{x})=\left[\begin{array}{cccccc}
+0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1 \\
+\dot \theta^{2} +\mu\left(3 r^{2}-R^{2}\right) / R^{5} & 0 & 3 \mu r z / R^{5} & 0 & 2 r \dot \theta & 0 \\
+2\dot r \dot \theta / r^{2}  - T_\theta / r^2 & 0 & 0 & -2 \dot \theta / r & -2\dot r / r & 0 \\
+3 \mu r z / R^{5} & 0 & \mu\left(3 z^{2}-R^{2}\right) / R^{5} & 0 & 0 & 0
+\end{array}\right]
+$$
+
+## 形状路径
+
+标称轨道
+
+$$
+\delta \dot{\boldsymbol{x}}=J_F\left(\boldsymbol{x}_{\mathrm{nom}}\right) \delta \boldsymbol{x}+\left[\begin{array}{l}
+0_{3 \times 3} \\
+I_{3 \times 3}
+\end{array}\right]\left(\frac{u T_{\mathrm{max}}}{m} \boldsymbol{\alpha}-\boldsymbol{a}_{\mathrm{nom}}\right)
+$$
+
+形状路径(Shape-Base Path)
 $$
 \left[\begin{array}{c}
 \frac{\mathrm{d} \delta \boldsymbol{x}}{\mathrm{d} s} \\
@@ -62,7 +119,7 @@ $$
 \end{array}\right]-f(s)
 $$
 
-式中，$F = A \frac{\mathrm{d}t}{\mathrm{d}s}$及$f = B\frac{\mathrm{d}t}{\mathrm{d}s}$
+式中，$F = J_F \frac{\mathrm{d}t}{\mathrm{d}s}$及$f = B\frac{\mathrm{d}t}{\mathrm{d}s}$
 $$
 \boldsymbol{y}\left(s_{f}\right)=\Phi\left(s_{f}, s_{0}\right) \boldsymbol{y}\left(s_{0}\right)-\int_{s_{0}}^{s_{f}} \Phi\left(s_{f}, v\right) \boldsymbol{f}(v) \mathrm{d} v
 $$
@@ -85,7 +142,23 @@ $$
 
 协态变量初值
 $$
-\lambda_{x}\left(s_{0}\right)=\Phi_{1,2}^{-1}\left(\delta \boldsymbol{x}\left(s_{f}\right)-\Phi_{1,1} \delta \boldsymbol{x}\left(s_{0}\right)+z_{1}\right)
+\boldsymbol\lambda_{x}\left(s_{0}\right)=\Phi_{1,2}^{-1}\left(\delta \boldsymbol{x}\left(s_{f}\right)-\Phi_{1,1} \delta \boldsymbol{x}\left(s_{0}\right)+z_{1}\right)
+$$
+
+由于式(14)的积分难求，故采用数值方式求解，打靶方程
+$$
+\begin{aligned}
+	\boldsymbol \Psi\left(\boldsymbol\lambda_x\left(s_0\right)\right)
+	&= \delta \boldsymbol{x}\left(s_{f}\right) + \boldsymbol{x}_{\mathrm{nom}}\left(s_{f}\right) - \boldsymbol x_{\mathrm{sc}}\left(t_{f}\right) \\
+	&= \Phi_{1,1} \delta \boldsymbol{x}\left(s_{0}\right)+\Phi_{1,2} \lambda_{x}\left(s_{0}\right)-z_{1} + \boldsymbol{x}_{\mathrm{nom}}\left(s_{f}\right) \\
+	&= \boldsymbol 0 \\
+\end{aligned}
+$$
+式中，$\boldsymbol x_{\mathrm{sc}}$为瞬时轨道，对于标称轨道$\boldsymbol x_{\mathrm{nom}}(s_0) = x_{\mathrm{sc}}(t_0)$，$\boldsymbol x_{\mathrm{nom}}(s_f) = x_{\mathrm{sc}}(t_f)$，上式可简化为$\boldsymbol \Psi\left(\boldsymbol\lambda_x\left(s_0\right)\right) = \delta \boldsymbol{x}\left(s_{f}\right) = \boldsymbol 0$
+
+从任意初值$\bar{\boldsymbol \lambda}$，用有限差分方法用来获得式(31)的雅可比矩阵，即雅各布矩阵实际上是$\Phi_{1,2}$。 单次牛顿迭代就可以得到解
+$$
+\boldsymbol \lambda_x^* = \bar{\boldsymbol \lambda}_x - \Phi_{1,2}\boldsymbol \Psi\left(\bar{\boldsymbol \lambda}_x\right)
 $$
 
 ## 形函数

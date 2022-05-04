@@ -1,4 +1,4 @@
-function [dPhi] = StateTransEq(t, Phi, FuncA)
+function [dPhi] = StateTransEq(t, Phi, FuncState)
 % 状态转移矩阵方程
 % Phi = exp(A)
 % dPhi = Phi * A
@@ -9,7 +9,7 @@ PhiM = zeros(n);
 for i = 1 : n
     PhiM(:, i) = Phi((i - 1) * n + (1 : n));
 end
-A = FuncA(t);
+A = FuncState(t);
 dPhiM = PhiM * A;
 dPhi = Phi;
 for i = 1 : n

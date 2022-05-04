@@ -1,0 +1,36 @@
+function [lambda] = ShapeBaseAdjVar(t, cr, cq, cz, x0, xf, p, varargin)
+% 柱坐标系交会(燃料最优)
+% 形状法找协态变量初值
+
+% 协态变量初值的初值
+if isempty(varargin)
+    lambda0 = 1e-2 * ones(6, 1);
+else
+    lambda0 = varargin{1};
+end
+
+% 动力学方程句柄
+FuncState = @(t) HmTSysCtrlMat(t, cr, cq, cz, x0, xf, p);
+
+%% 状态转移矩阵
+Phi0 = eye(12);
+[~, PhiV] = ode45(@(t, x) StateTransEq(t, x, FuncState), t, Phi0);
+Phi = Phi0;
+% 先列后行
+for i = 1 : 12
+    Phi(:, i) = PhiV(end, (i - 1) * 12 + (1 : 12));
+end
+Phi12 = Phi(1 : 6, 7 : 12);
+
+
+%% 协态变量初值
+delta_x0 = zeros(6, 1);
+[~, delta_x_lambda] = ode45(@(t, x) StateTransEq2(t, x, FuncState), t, [delta_x0; lambda0]);
+[~, x_sc] = ode45(@(t, x) CylinEnergyEq(t, x, p), t, [x0; lambda0]);
+% 打靶函数
+Psi = delta_x_lambda(end, 1 : 6)';
+Psi = delta_x_lambda(end, 1 : 6)' + xf - x_sc(end, 1 : 6)';
+
+% 牛顿迭代   
+lambda = lambda0 - Phi12 \ Psi;
+end

@@ -1,6 +1,6 @@
-function [x, dx] = Cart2Cylin(varargin)
+function [x, vx] = Cart2Cylin2(varargin)
 % 笛卡尔坐标系转柱坐标系
-% dq/dt
+% vq
 
 if length(varargin) == 1
     r = varargin{1}(1 : 3);
@@ -31,20 +31,19 @@ q    = atan2(ry, rx);
 z    = rz;
 cq   = cos(q);
 sq   = sin(q);
-drho = vx * cq + vy * sq;
-dq   = (-vx * sq + vy * cq) / rho;
-dz   = vz;
+vrho = vx * cq + vy * sq;
+vq   = -vx * sq + vy * cq;
 
 x     = r;
-dx    = v;
+vx    = v;
 x(1)  = rho;
 x(2)  = q;
 x(3)  = z;
-dx(1) = drho;
-dx(2) = dq;
-dx(3) = dz;
+vx(1) = vrho;
+vx(2) = vq;
+vx(3) = vz;
 
 if length(varargin) == 1
-    x = [x; dx];
+    x = [x; vx];
 end
 end

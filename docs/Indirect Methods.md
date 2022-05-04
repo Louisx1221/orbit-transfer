@@ -34,6 +34,10 @@ H = L + \boldsymbol \lambda^{\mathrm{T}}\boldsymbol f = \frac12\boldsymbol u^2 +
 $$
 
 $$
+\dot{\boldsymbol \lambda} = -\frac{\partial H}{\partial \boldsymbol{x}} = -\boldsymbol A^\mathrm{T}\boldsymbol\lambda
+$$
+
+$$
 \frac{\partial H}{\partial \boldsymbol u} = \boldsymbol u + \boldsymbol B^{\mathrm{T}} \boldsymbol \lambda = 0 \\
 \Rightarrow \boldsymbol u = -\boldsymbol B^{\mathrm{T}} \boldsymbol \lambda
 $$
