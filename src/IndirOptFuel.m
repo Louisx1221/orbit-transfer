@@ -11,9 +11,26 @@ for epsilon = 1 - (0 : 0.2 : 1)
     x0 = x;
 end
 
-x0 = [s0; x(1 : 6); zeros(4, 1)];
+lambda = x;
+% x0 = [s0; lambda; zeros(4, 1)];
+x0 = [s0; lambda];
 [t, x] = ode45(@(t, x) DynEq(t, x, epsilon, p), 0 : p.tspan : tf, x0);
-sol = [t, x];
+
+u = zeros(length(t), 4);
+for i = 1 : length(t)
+    lambda_v = x(i, 10 : 12);
+    rho = 1 - p.f * norm(lambda_v);
+    if rho > epsilon
+        s = 0;
+    elseif rho < -epsilon
+        s = 1;
+    else
+        s = 1 / 2 - rho / 2 / epsilon;
+    end
+    u(i, 1 : 3) = -s * p.f * lambda_v / norm(lambda_v);
+    u(i, 4) = norm(u(i, 1 : 3));
+end
+sol = [t, x, u];
 end
 
 
@@ -34,8 +51,8 @@ function [c, ceq] = Con(x, s0, sf, tf, DynEq, args)
 % x:    lambda, tf
 % args: n, f, tspan
 
-x0 = [s0; x(1 : 6); zeros(4, 1)];
-
+% x0 = [s0; x(1 : 6); zeros(4, 1)];
+x0 = [s0; x(1 : 6)];
 [~, x] = ode45(DynEq, 0 : args.tspan : tf, x0);
 
 % 期望终端状态
