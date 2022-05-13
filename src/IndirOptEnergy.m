@@ -1,7 +1,12 @@
-function [sol,fval,exitflag,output] = IndirOptEnergy(DynEq, s0, sf, tf, p)
+function [sol,lambda,fval,exitflag,output] = IndirOptEnergy(DynEq, s0, sf, tf, p, varargin)
 % 间接法优化(能量最优)
 
-x0 = 0.01 * ones(length(s0), 1);
+if isempty(varargin)
+    x0 = 0.01 * ones(length(s0), 1);
+else
+    x0 = varargin{1};
+end
+
 options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-6,...
                     'Algorithm','interior-point',...
                     'MaxFunEvals',10000000,'MaxIter',1000,...

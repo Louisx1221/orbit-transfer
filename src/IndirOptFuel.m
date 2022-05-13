@@ -2,6 +2,10 @@ function [sol,fval,exitflag,output] = IndirOptFuel(DynEq, s0, sf, tf, p)
 % 间接法优化(燃料最优)
 
 x0 = 0.01 * ones(length(s0), 1);
+if isfield(p, 'f')
+    x0(4 : 6) = x0(4 : 6) / norm(x0) * p.f;
+end
+
 options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-6,...
                     'Algorithm','interior-point',...
                     'MaxFunEvals',10000000,'MaxIter',1000,...

@@ -100,6 +100,8 @@ $$
 \left.\left(\frac{\partial \boldsymbol \Phi}{\partial t_f} + H\right)\right|_{t_f} = 1 + \boldsymbol \lambda^{\mathrm{T}}(t_f)\left[\boldsymbol A \boldsymbol x(t_f) + \boldsymbol B \boldsymbol u(t_f)\right] = 0
 $$
 
+- [ ] 时域变换
+
 
 $$
 \tau = \frac{t}{t_f - t_0} \\
@@ -110,6 +112,12 @@ $$
 $$
 \boldsymbol{ceq}=[\boldsymbol x_0, \boldsymbol x_f, \boldsymbol \lambda_f]
 $$
+
+- [x] 粒子群
+
+罚函数
+
+
 
 ## 两点边值问题
 
