@@ -14,13 +14,13 @@ else
     end
 end
 
-lb = [-1e3 * ones(length(s0) / 2, 1); 0.5 * tf];
-ub = [1e3 * ones(length(s0) / 2, 1); 0.7 * tf];
+lb = [-1e5 * ones(length(s0) / 2, 1); 0.5 * tf];
+ub = [1e5 * ones(length(s0) / 2, 1); 0.7 * tf];
 % lb=[];
 % ub=[];
-options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-6,...
+options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-2,...
                     'Algorithm','interior-point',...
-                    'MaxFunEvals',10000000,'MaxIter',1000,...
+                    'MaxFunEvals',10000000,'MaxIter',500,...
                     'Display','iter','largescale','on','PlotFcn','optimplotfvalconstr');
 [x,fval,exitflag,output] = fmincon(@(x) Cost(x),x0,[],[],[],[],lb,ub,@(x) Con(x, s0, sf, DynEq, p), options);
 
@@ -28,7 +28,7 @@ tf = x(end);
 lr = x(1 : 3);
 lv = CwLambdaR2V(lr, p.n, tf);
 
-x0 = [s0; lr; lv; zeros(4, 1)];
+x0 = [s0; lr; lv];
 
 [t, x] = ode45(DynEq, 0 : p.tspan : tf, x0);
 sol = [t, x];
@@ -50,7 +50,7 @@ tf = x(end);
 lr = x(1 : 3);
 lv = CwLambdaR2V(lr, p.n, tf);
 
-x0 = [s0; lr; lv; zeros(4, 1)];
+x0 = [s0; lr; lv];
 
 [~, x] = ode45(DynEq, 0 : p.tspan : tf, x0);
 % dxf = DynEq(0, x(end, :)');
