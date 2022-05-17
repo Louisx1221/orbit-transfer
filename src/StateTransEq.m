@@ -4,15 +4,8 @@ function [dPhi] = StateTransEq(t, Phi, FuncState)
 % dPhi = Phi * A
 
 n = sqrt(length(Phi));
-PhiM = zeros(n);
-% 先列后行
-for i = 1 : n
-    PhiM(:, i) = Phi((i - 1) * n + (1 : n));
-end
+Phi = reshape(Phi, [n, n]);
 A = FuncState(t);
-dPhiM = PhiM * A;
-dPhi = Phi;
-for i = 1 : n
-    dPhi((i - 1) * n + (1 : n)) = dPhiM(:, i);
-end
+dPhi = Phi * A;
+dPhi = reshape(dPhi, [n^2, 1]);
 end

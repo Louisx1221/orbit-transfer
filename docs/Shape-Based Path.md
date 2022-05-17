@@ -108,6 +108,26 @@ I_{3 \times 3}
 \end{array}\right]\left(\frac{u T_{\mathrm{max}}}{m} \boldsymbol{\alpha}-\boldsymbol{a}_{\mathrm{nom}}\right)
 $$
 
+动力学及欧拉-拉格朗日方程
+$$
+\left[\begin{array}{c}
+\delta \dot{\boldsymbol{x}} \\
+\dot{\boldsymbol\lambda}_{x}
+\end{array}\right]=\left[\begin{array}{cc}
+\boldsymbol M\left(\boldsymbol{x}_{\mathrm{nom}}\right) & {\left[\begin{array}{cc}
+\boldsymbol 0_{3 \times 3} & \boldsymbol 0_{3 \times 3} \\
+\boldsymbol 0_{3 \times 3} & -\frac{I_{\mathrm{ss}} g_{0} T_{\max }}{2 m^{2}} I_{3 \times 3}
+\end{array}\right]} \\
+\boldsymbol 0_{6 \times 6} & -\boldsymbol M^{T}\left(\boldsymbol{x}_{\mathrm{nom}}\right)
+\end{array}\right]\left[\begin{array}{l}
+\delta \boldsymbol{x} \\
+\boldsymbol \lambda_{x}
+\end{array}\right]-\left[\begin{array}{l}
+\boldsymbol 0_{3 \times 1} \\
+\boldsymbol{a}_{\mathrm{nom}} \\
+\boldsymbol 0_{6 \times 1}
+\end{array}\right]
+$$
 形状路径(Shape-Base Path)
 $$
 \left[\begin{array}{c}
@@ -156,9 +176,9 @@ $$
 $$
 式中，$\boldsymbol x_{\mathrm{sc}}$为瞬时轨道，对于标称轨道$\boldsymbol x_{\mathrm{nom}}(s_0) = x_{\mathrm{sc}}(t_0)$，$\boldsymbol x_{\mathrm{nom}}(s_f) = x_{\mathrm{sc}}(t_f)$，上式可简化为$\boldsymbol \Psi\left(\boldsymbol\lambda_x\left(s_0\right)\right) = \delta \boldsymbol{x}\left(s_{f}\right) = \boldsymbol 0$
 
-从任意初值$\bar{\boldsymbol \lambda}$，用有限差分方法用来获得式(31)的雅可比矩阵，即雅各布矩阵实际上是$\Phi_{1,2}$。 单次牛顿迭代就可以得到解
+从任意初值$\bar{\boldsymbol \lambda}$，用有限差分方法用来获得式(16)的雅可比矩阵，而雅可比矩阵实际上是$\Phi_{1,2}$。 单次牛顿迭代就可以得到解
 $$
-\boldsymbol \lambda_x^* = \bar{\boldsymbol \lambda}_x - \Phi_{1,2}\boldsymbol \Psi\left(\bar{\boldsymbol \lambda}_x\right)
+\boldsymbol \lambda_x^* = \bar{\boldsymbol \lambda}_x - \Phi_{1,2}^{-1}\boldsymbol \Psi\left(\bar{\boldsymbol \lambda}_x\right)
 $$
 
 ## 形函数
