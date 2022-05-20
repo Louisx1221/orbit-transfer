@@ -1,11 +1,11 @@
-function [dPhi] = StateTransEq(t, Phi, FuncState)
+function [dphi] = StateTransEq(t, phi_, FuncState)
 % 状态转移矩阵方程
 % Phi = exp(A)
 % dPhi = Phi * A
 
-n = sqrt(length(Phi));
-Phi = reshape(Phi, [n, n]);
+n = sqrt(length(phi_));
+phi_ = reshape(phi_, [n, n]);
 A = FuncState(t);
-dPhi = Phi * A;
-dPhi = reshape(dPhi, [n^2, 1]);
+dphi = A * phi_;
+dphi = reshape(dphi, [n^2, 1]);
 end

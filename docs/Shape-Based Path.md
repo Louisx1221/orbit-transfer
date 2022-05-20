@@ -165,7 +165,7 @@ $$
 \boldsymbol\lambda_{x}\left(s_{0}\right)=\Phi_{1,2}^{-1}\left(\delta \boldsymbol{x}\left(s_{f}\right)-\Phi_{1,1} \delta \boldsymbol{x}\left(s_{0}\right)+z_{1}\right)
 $$
 
-由于式(14)的积分难求，故采用数值方式求解，打靶方程
+由于式(15)的积分难求，故采用数值方式求解，打靶方程
 $$
 \begin{aligned}
 	\boldsymbol \Psi\left(\boldsymbol\lambda_x\left(s_0\right)\right)

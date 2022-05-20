@@ -13,20 +13,20 @@ end
 FuncState = @(t) HmTSysCtrlMat(t, cr, cq, cz, x0, xf, p);
 
 %% 状态转移矩阵
-Phi0 = eye(12);
-[~, PhiV] = ode45(@(t, x) StateTransEq(t, x, FuncState), t, Phi0);
-Phi = reshape(PhiV(end, :), [12, 12]);
-Phi12 = Phi(1 : 6, 7 : 12);
+phi0 = eye(12);
+[~, phiv] = ode45(@(t, x) StateTransEq(t, x, FuncState), t, phi0);
+phi_ = reshape(phiv(end, :), [12, 12]);
+Phi12 = phi_(1 : 6, 7 : 12);
 
 
 %% 协态变量初值
 delta_x0 = zeros(6, 1);
 [~, delta_x_lambda] = ode45(@(t, x) StateTransEq2(t, x, FuncState), t, [delta_x0; lambda0]);
-[~, x_sc] = ode45(@(t, x) CylinEnergyEq(t, x, p), t, [x0; lambda0]);
+% [~, x_sc] = ode45(@(t, x) CylinEnergyEq(t, x, p), t, [x0; lambda0]);
 % 打靶函数
-Psi = delta_x_lambda(end, 1 : 6)';
+psi_ = delta_x_lambda(end, 1 : 6)';
 % Psi = delta_x_lambda(end, 1 : 6)' + xf - x_sc(end, 1 : 6)';
 
 % 牛顿迭代   
-lambda = lambda0 - Phi12 \ Psi;
+lambda = lambda0 - Phi12 \ psi_;
 end
