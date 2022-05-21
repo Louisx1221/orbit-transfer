@@ -144,7 +144,7 @@ $$
 \boldsymbol{y}\left(s_{f}\right)=\Phi\left(s_{f}, s_{0}\right) \boldsymbol{y}\left(s_{0}\right)-\int_{s_{0}}^{s_{f}} \Phi\left(s_{f}, v\right) \boldsymbol{f}(v) \mathrm{d} v
 $$
 
-式中，$\boldsymbol \Phi = e^{\boldsymbol F}$
+式中，$\boldsymbol \Phi = e^{\boldsymbol F}$，即$\frac{\mathrm{d}\boldsymbol\Phi}{\mathrm{d}s} = \boldsymbol F\boldsymbol\Phi$，$\boldsymbol\Phi(s_0) = \boldsymbol I_{12\times 12}$
 $$
 \Phi\left(s_{f}, s_{0}\right)=\left[\begin{array}{ll}
 \Phi_{1,1} & \Phi_{1,2} \\
@@ -310,3 +310,17 @@ $$
 3. $Z$
 
 同$R$
+
+```mathematica
+D[(cr1 + cr2 s + cr3 s s)/(ct1 + ct2 s + ct3 s s), s]
+(cr3 s (2 ct1 + ct2 s) - cr1 (ct2 + 2 ct3 s) + 
+ cr2 (ct1 - ct3 s^2))/(ct1 + s (ct2 + ct3 s))^2
+ 
+ D[(xf2 - x02) (x01 + cr1 s + cr2 s s/2 + cr3 s s s/3)/(ct1 + ct2 s + 
+     ct3 s s), s]
+(1/((ct1 + 
+  s (ct2 + ct3 s))^2))((cr1 + s (cr2 + cr3 s)) (ct1 + 
+      s (ct2 + ct3 s)) - (ct2 + 2 ct3 s) (cr1 s + (cr2 s^2)/2 + (
+      cr3 s^3)/3 + x01)) (-x02 + xf2)
+```
+
