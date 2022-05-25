@@ -27,7 +27,7 @@ I_{3 \times 3}
 \end{array}\right] \boldsymbol{\alpha}
 $$
 
-式中，$R = \sqrt(r^2 + z^2)$
+式中，$R = \sqrt{r^2 + z^2}$
 $$
 \dot{\boldsymbol x} = J_F(\boldsymbol x)\boldsymbol x + \boldsymbol B\boldsymbol u \\
 \boldsymbol B = \left[\begin{array}{c}
