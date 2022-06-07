@@ -18,8 +18,8 @@ dx = x;
 dx(1 : 3) = v;
 dx(4 : 6) = -ap.MU / r3 * r + u;
 % lambda
-dx(7) = 3 * ap.MU / r5 * r(1) * r(1) - ap.MU / r3;
-dx(8) = 3 * ap.MU / r5 * r(2) * r(2) - ap.MU / r3;
-dx(9) = 3 * ap.MU / r5 * r(3) * r(3) - ap.MU / r3;
+dx(7) = -(3 * ap.MU / r5 * r(1) * r(1) - ap.MU / r3);
+dx(8) = -(3 * ap.MU / r5 * r(2) * r(2) - ap.MU / r3);
+dx(9) = -(3 * ap.MU / r5 * r(3) * r(3) - ap.MU / r3);
 dx(10 : 12) = -lr;
 end
