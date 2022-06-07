@@ -15,7 +15,7 @@ else
 end
 
 lb = [-1e5 * ones(length(s0) / 2, 1); 0.5 * tf];
-ub = [1e5 * ones(length(s0) / 2, 1); 0.7 * tf];
+ub = [1e5 * ones(length(s0) / 2, 1); 1.2 * tf];
 % lb=[];
 % ub=[];
 options = optimset('TolX',1e-9,'TolFun',1e-9,'TolCon',1e-2,...
@@ -42,23 +42,22 @@ J = x(end);
 end
 
 %% 边界条件
-function [c, ceq] = Con(x, s0, sf, DynEq, p)
+function [c, ceq] = Con(x, s0, sf, DynEq, ap)
 % x:    lambda, tf
 % args: n, f, tspan
 
 tf = x(end);
 lr = x(1 : 3);
-lv = CwLambdaR2V(lr, p.n, tf);
+lv = CwLambdaR2V(lr, ap.n, tf);
 
 x0 = [s0; lr; lv];
 
-[~, x] = ode45(DynEq, 0 : p.tspan : tf, x0);
-% dxf = DynEq(0, x(end, :)');
+[~, x] = ode45(DynEq, 0 : ap.tspan : tf, x0);
 
 % 期望终端状态
 ceq = x(end, 1 : 6)' - sf;
 % ceq(1 : 3) = ceq(1 : 3) * 1e-2;
 ceq = ceq(1 : 3);
-% ceq = [ceq; 1 + x(end, 7 : 12) * dxf(1 : 6)];
+ceq = [ceq; 1 + x(end, 7 : 9) * x(4 : 6)'];
 c = [];
 end

@@ -1,22 +1,22 @@
 function [dv, dv0, dvf] = Cw2Impulse(n, x0, tof, varargin)
 %
-% Ïà¶ÔÔË¶¯½»»á(C-W·½³Ì)
-% 
-% ÊäÈë:
-% n         ¹ìµÀ½ÇËÙ¶È         (rad/s)
-% x0        ³õÊ¼ÏàÎ»Î»ÖÃËÙ¶È    (m, m/s)
-% tof       ×ªÒÆÊ±³¤           (s)
-% xf        Ä¿±êÏàÎ»Î»ÖÃËÙ¶È    (m, m/s)    ¿ÉÈ±Ê¡£¬Ä¬ÈÏÎª0
+% ç›¸å¯¹è¿åŠ¨äº¤ä¼š(C-Wæ–¹ç¨‹)
 %
-% Êä³ö:
-% dv        ËùĞè×ÜËÙ¶ÈÂö³å     (m/s)
-% dv0       µÚÒ»´ÎËÙ¶ÈÂö³å     (m/s)
-% dvf       µÚ¶ş´ÎËÙ¶ÈÂö³å     (m/s)
+% è¾“å…¥:
+% n         è½¨é“è§’é€Ÿåº¦         (rad/s)
+% x0        åˆå§‹ç›¸å¯¹ä½ç½®é€Ÿåº¦   (m, m/s)
+% tof       è½¬ç§»æ—¶é•¿           (s)
+% xf        ç›®æ ‡ç›¸å¯¹ä½ç½®é€Ÿåº¦   (m, m/s)    å¯ç¼ºçœï¼Œé»˜è®¤ä¸º0
 %
-% ²Î¿¼£º
+% è¾“å‡º:
+% dv        æ‰€éœ€æ€»é€Ÿåº¦è„‰å†²     (m/s)
+% dv0       ç¬¬ä¸€æ¬¡é€Ÿåº¦è„‰å†²     (m/s)
+% dvf       ç¬¬äºŒæ¬¡é€Ÿåº¦è„‰å†²     (m/s)
+%
+% å‚è€ƒï¼š
 % Orbital Mechanics for Engineering Students, 4th, Howard Curtis, p369-370
 
-%% ÊäÈë
+%% è¾“å…¥
 if size(x0, 1) == 1
     x0 = x0';
 end
@@ -35,22 +35,22 @@ else
     vf = xf(4 : 6);
 end
 
-%% Ë«Âö³å
+%% åŒè„‰å†²
 % C-W
 nt = n * tof;
 phi_rr = [4 - 3 * cos(nt) 0 0;
-          6 * (sin(nt) - nt) 1 0;
-          0 0 cos(nt)];
+    6 * (sin(nt) - nt) 1 0;
+    0 0 cos(nt)];
 phi_rv = [sin(nt) / n (1 - cos(nt)) * 2 / n 0;
-          (cos(nt) - 1) * 2 / n (4 * sin(nt) - 3 * nt) / n 0;
-          0 0 sin(nt) / n];
+    (cos(nt) - 1) * 2 / n (4 * sin(nt) - 3 * nt) / n 0;
+    0 0 sin(nt) / n];
 phi_vr = [3 * n * sin(nt) 0 0;
-          6 * n * (cos(nt) - 1) 0 0;
-          0 0 -n * sin(nt)];
+    6 * n * (cos(nt) - 1) 0 0;
+    0 0 -n * sin(nt)];
 phi_vv = [cos(nt) 2 * sin(nt) 0;
-          -2 * sin(nt) 4 * cos(nt) - 3 0;
-          0 0 cos(nt)];
-% Âö³å
+    -2 * sin(nt) 4 * cos(nt) - 3 0;
+    0 0 cos(nt)];
+% è„‰å†²
 v0_ = phi_rv \ (rf - phi_rr * r0);
 vf_ = phi_vr * r0 + phi_vv * v0_;
 dv0 = v0_ - v0;

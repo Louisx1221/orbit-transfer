@@ -154,7 +154,7 @@ $$
 \end{aligned}\right.
 $$
 
-## Rendezvous
+## Intercept
 
 $$
 \lambda_{4,f} = \lambda_{5,f} = \lambda_{6,f} = 0
