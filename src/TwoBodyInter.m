@@ -2,10 +2,10 @@ function [sp, se, lambda, tf] = TwoBodyInter(xp, xe, tf, ap, varargin)
 % 二体拦截(时间最优)
 
 if isempty(varargin)
-    x0 = [0.01 * ones(length(s0), 1); 0.8 * tf];
+    x0 = [0.1 * ones(6, 1); 1.0 * tf];
 else
     if length(varargin{1}) == 1
-        x0 = [0.01 * ones(length(s0), 1); varargin{1}];
+        x0 = [0.1 * ones(6, 1); varargin{1}];
     else
         x0 = varargin{1};
     end

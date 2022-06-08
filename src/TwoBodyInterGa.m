@@ -8,7 +8,7 @@ end
 lb = [-1e2 * ones(6, 1); 0.8 * tf];
 ub = [1e2 * ones(6, 1); 1.2 * tf];
 
-options = optimoptions('ga', 'Display', 'iter', 'PlotFcn', @gaplotbestf);
+options = optimoptions('ga', 'Display', 'iter', 'Generations', 100, 'PlotFcn', @gaplotbestf);
 [x] = ga(@(x) Cost(x, xp, xe, ap),7,[],[],[],[],lb,ub,[], options);
 
 tf = x(end);
